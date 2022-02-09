@@ -7,10 +7,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.4'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
         // workaround lint bug concerning lombok (used by retrolambda)
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath "com.neenbedankt.gradle.plugins:android-apt:1.4"
@@ -19,15 +17,15 @@ buildscript {
         // in the individual module build.gradle files
     }
 
+    // Exclude the version that the android plugin depends on.
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
         google()
-        maven {
-            url "https://dl.bintray.com/touchlab/Squeaky"
-        }
         maven { url "https://jitpack.io" }
     }
 }
