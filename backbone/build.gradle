@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'maven-publish'
 apply plugin: "maven"
 
-version = '2.2.3'
+version = '2.2.4'
 
 android {
     compileSdkVersion 30
@@ -11,7 +11,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 116
+        versionCode 117
         versionName version
         vectorDrawables.useSupportLibrary = true
 
