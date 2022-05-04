@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-version = '2.2.4'
+version = '2.2.6'
 
 android {
     compileSdkVersion 31
@@ -13,7 +13,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 117
+        versionCode 118
         versionName version
         vectorDrawables.useSupportLibrary = true
 
