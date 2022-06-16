@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.github.dcendents.android-maven'
 
-version = '2.2.7'
+version = '2.2.8'
 
 android {
     compileSdkVersion 31
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 119
+        versionCode 120
         versionName version
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
