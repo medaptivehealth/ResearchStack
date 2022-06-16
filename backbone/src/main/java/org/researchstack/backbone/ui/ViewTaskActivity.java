@@ -147,7 +147,7 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
         Step previousStep = task.getStepBeforeStep(currentStep, taskResult);
         if(previousStep == null)
         {
-            discardResultsAndFinish();
+            showConfirmExitDialog();
         }
         else
         {
