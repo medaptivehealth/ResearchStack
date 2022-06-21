@@ -4,10 +4,12 @@ import org.researchstack.backbone.ui.step.body.DateQuestionBody;
 import org.researchstack.backbone.ui.step.body.DecimalQuestionBody;
 import org.researchstack.backbone.ui.step.body.DurationQuestionBody;
 import org.researchstack.backbone.ui.step.body.FormBody;
+import org.researchstack.backbone.ui.step.body.ImageChoiceBody;
 import org.researchstack.backbone.ui.step.body.IntegerQuestionBody;
 import org.researchstack.backbone.ui.step.body.MultiChoiceQuestionBody;
 import org.researchstack.backbone.ui.step.body.NotImplementedStepBody;
 import org.researchstack.backbone.ui.step.body.SingleChoiceQuestionBody;
+import org.researchstack.backbone.ui.step.body.StepBody;
 import org.researchstack.backbone.ui.step.body.TextQuestionBody;
 
 import java.io.Serializable;
@@ -23,10 +25,7 @@ import java.io.Serializable;
  * a {@link org.researchstack.backbone.ui.ViewTaskActivity}.
  */
 public abstract class AnswerFormat implements Serializable {
-    /**
-     * Default constructor. The appropriate subclass of AnswerFormat should be used instead of this
-     * directly.
-     */
+    /* Default constructor needed for serialization/deserialization of object */
     public AnswerFormat() {
     }
 
@@ -57,21 +56,23 @@ public abstract class AnswerFormat implements Serializable {
         Eligibility(NotImplementedStepBody.class),
         Text(TextQuestionBody.class),
         TimeOfDay(DateQuestionBody.class),
+        MonthYear(DateQuestionBody.class),
         DateAndTime(DateQuestionBody.class),
         Date(DateQuestionBody.class),
         TimeInterval(NotImplementedStepBody.class),
         Duration(DurationQuestionBody.class),
         Location(NotImplementedStepBody.class),
-        Form(FormBody.class);
+        Form(FormBody.class),
+        ImageChoice(ImageChoiceBody.class);
 
-        private Class<?> stepBodyClass;
+        private Class<? extends StepBody> stepBodyClass;
 
-        Type(Class<?> stepBodyClass) {
+        Type(Class<? extends StepBody> stepBodyClass) {
             this.stepBodyClass = stepBodyClass;
         }
 
         @Override
-        public Class<?> getStepBodyClass() {
+        public Class<? extends StepBody> getStepBodyClass() {
             return stepBodyClass;
         }
 
@@ -99,7 +100,8 @@ public abstract class AnswerFormat implements Serializable {
     public enum DateAnswerStyle {
         DateAndTime,
         Date,
-        TimeOfDay
+        TimeOfDay,
+        MonthYear
     }
 
     /**
@@ -108,6 +110,6 @@ public abstract class AnswerFormat implements Serializable {
      * org.researchstack.backbone.ui.step.body.StepBody} class.
      */
     public interface QuestionType {
-        Class<?> getStepBodyClass();
+        Class<? extends StepBody> getStepBodyClass();
     }
 }

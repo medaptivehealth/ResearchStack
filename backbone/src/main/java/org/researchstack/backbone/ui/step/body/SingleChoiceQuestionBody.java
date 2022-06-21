@@ -1,7 +1,7 @@
 package org.researchstack.backbone.ui.step.body;
 
 import android.content.res.Resources;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +21,11 @@ public class SingleChoiceQuestionBody<T> implements StepBody {
     //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
     // Constructor Fields
     //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-    private QuestionStep step;
-    private StepResult<T> result;
-    private ChoiceAnswerFormat format;
-    private Choice<T>[] choices;
-    private T currentSelected;
+    protected QuestionStep step;
+    protected StepResult<T> result;
+    protected ChoiceAnswerFormat format;
+    protected Choice<T>[] choices;
+    protected T currentSelected;
 
     public SingleChoiceQuestionBody(Step step, StepResult result) {
         this.step = (QuestionStep) step;

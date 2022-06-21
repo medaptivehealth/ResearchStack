@@ -1,20 +1,28 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'maven-publish'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
-version = '1.1.2'
+version = '2.2.8'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 31
+
+    dexOptions {
+        preDexLibraries = false
+    }
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 6
+        minSdkVersion 19
+        targetSdkVersion 31
+        versionCode 120
         versionName version
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+            // Filter for architectures supported by Flutter.
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64', 'x86'
+        }
     }
     buildTypes {
         release {
@@ -23,158 +31,110 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
 
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
     resourcePrefix 'rsb_'
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-ext {
-    bintrayRepo = 'ResearchStack'
-    bintrayName = 'Backbone'
-
-    publishedGroupId = 'org.researchstack'
-    libraryName = 'Backbone'
-    artifact = 'backbone'
-
-    libraryDescription = 'Backbone description'
-
-    siteUrl = 'https://researchstack.org'
-    gitUrl = 'https://github.com/ResearchStack/ResearchStack.git'
-
-    libraryVersion = version
-
-    userOrgName = 'researchstack'
-    developerId = properties.getProperty("bintray.user")
-    developerName = properties.getProperty("bintray.developerName")
-    developerEmail = properties.getProperty("bintray.developerEmail")
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:cardview-v7:23.2.1'
-    compile 'com.android.support:preference-v14:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.google.code.gson:gson:2.4'
-    compile 'io.reactivex:rxjava:1.1.3'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.2.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.2.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-design:0.2.0'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.3'
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.so', '**/*.so'])
 
-    compile 'com.scottyab:aes-crypto:0.0.3'
-    compile 'co.touchlab.squeaky:squeaky-query:0.4.0.0'
-    apt 'co.touchlab.squeaky:squeaky-processor:0.4.0.0'
-    compile 'net.zetetic:android-database-sqlcipher:3.5.4@aar'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.0'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    // These are all support libraries that should be updated when Google releases new ones
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'com.cronutils:cron-utils:3.1.2', {
+        exclude group: 'joda-time', module: 'joda-time' // this can cause dex errors due to duplicate joda times
+    }
+    implementation 'net.danlew:android.joda:2.9.9.4' // android specific joda time, jre version causes perf problems
+    testImplementation 'joda-time:joda-time:2.9.9'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.7'
+
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.3.0'
+
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
+
+    // Used to display UploadData and study data in various chart formats
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.3'
+
+    implementation 'com.scottyab:aes-crypto:0.0.3'
+    api 'co.touchlab.squeaky:squeaky-query:0.4.0.0'
+    annotationProcessor 'co.touchlab.squeaky:squeaky-processor:0.4.0.0'
+    api 'net.zetetic:android-database-sqlcipher:4.0.1@aar'
+
+    // Libraries to help with unit testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:3.4.4'
+    androidTestImplementation 'org.mockito:mockito-android:3.4.4'
+    testImplementation "org.powermock:powermock-module-junit4:2.0.4"
+    testImplementation "org.powermock:powermock-module-junit4-rule:2.0.4"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.4"
+    testImplementation "org.powermock:powermock-classloading-xstream:2.0.4"
+
+    testImplementation 'org.robolectric:robolectric:3.5'
 }
 
-group = publishedGroupId                               // Maven Group ID for the artifact
 
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+project.afterEvaluate {
+    publishing {
+        publications {
+            msdk(MavenPublication) {
 
-                // Add your description here
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                // Set your license
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
+                groupId 'com.medaptivehealth.researchstack'
+                artifactId 'backbone'
+                version version
+                artifact(bundleReleaseAar)
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.compile.allDependencies.each {
+                        if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
                 }
             }
         }
-    }
-}
-
-if (project.hasProperty("android")) { // Android libraries
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from android.sourceSets.main.java.srcDirs
-    }
-
-    task javadoc(type: Javadoc) {
-        failOnError false
-        source = android.sourceSets.main.java.srcDirs
-    }
-
-    afterEvaluate {
-        javadoc.classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-        javadoc.classpath += files(android.libraryVariants.collect { variant ->
-            variant.javaCompile.classpath.files
-        })
-    }
-} else { // Java libraries
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = userOrgName
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        publish = true
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                url "${System.env.HOME}/.m2/repository"
+            }
+        }
     }
 }

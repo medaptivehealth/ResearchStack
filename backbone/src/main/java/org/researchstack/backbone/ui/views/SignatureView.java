@@ -14,7 +14,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.shapes.PathShape;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -251,6 +251,8 @@ public class SignatureView extends View {
      * {@link android.graphics.PathMeasure} class and get minX and minY from that.
      * <p>
      * 2. Scale bitmap down. Currently drawing at density of device.
+     *
+     * @return the signature bitmap
      */
     public Bitmap createSignatureBitmap() {
 

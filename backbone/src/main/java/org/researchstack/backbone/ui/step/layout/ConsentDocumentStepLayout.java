@@ -1,7 +1,7 @@
 package org.researchstack.backbone.ui.step.layout;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +46,9 @@ public class ConsentDocumentStepLayout extends LinearLayout implements StepLayou
     public void initialize(Step step, StepResult result) {
         this.step = (ConsentDocumentStep) step;
         this.confirmationDialogBody = ((ConsentDocumentStep) step).getConfirmMessage();
+        if (confirmationDialogBody == null) {
+            confirmationDialogBody = getContext().getString(R.string.rsb_consent_document_review_message);
+        }
         this.htmlContent = ((ConsentDocumentStep) step).getConsentHTML();
         this.stepResult = result;
 
