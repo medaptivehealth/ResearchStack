@@ -4,10 +4,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-<<<<<<< Updated upstream
-=======
-        //jcenter()
->>>>>>> Stashed changes
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
