@@ -1,6 +1,11 @@
 package org.researchstack.backbone.storage;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.j256.ormlite.table.TableUtils;
+
+import net.sqlcipher.database.SQLiteDatabase;
 
 import org.researchstack.backbone.storage.database.TaskNotification;
 import org.researchstack.backbone.utils.LogExt;
@@ -8,11 +13,7 @@ import org.researchstack.backbone.utils.LogExt;
 import java.sql.SQLException;
 import java.util.List;
 
-import co.touchlab.squeaky.db.sqlite.SQLiteDatabaseImpl;
-import co.touchlab.squeaky.db.sqlite.SqueakyOpenHelper;
-import co.touchlab.squeaky.table.TableUtils;
-
-public class NotificationHelper extends SqueakyOpenHelper {
+public class NotificationHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "db_notification";
 
     private static int DB_VERSION = 1;
@@ -33,7 +34,7 @@ public class NotificationHelper extends SqueakyOpenHelper {
     @Override
     public void onCreate(android.database.sqlite.SQLiteDatabase sqLiteDatabase) {
         try {
-            TableUtils.createTables(new SQLiteDatabaseImpl(sqLiteDatabase), TaskNotification.class);
+            TableUtils.getCreateTableStatements(new SQLiteDatabase(sqLiteDatabase), TaskNotification.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

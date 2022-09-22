@@ -1,13 +1,13 @@
 package org.researchstack.backbone.storage.database;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 
 import java.util.Date;
 import java.util.List;
-
-import co.touchlab.squeaky.field.DatabaseField;
-import co.touchlab.squeaky.table.DatabaseTable;
 
 @DatabaseTable
 public class TaskRecord {

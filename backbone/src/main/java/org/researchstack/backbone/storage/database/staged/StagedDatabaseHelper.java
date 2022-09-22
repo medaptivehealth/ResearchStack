@@ -21,9 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.touchlab.squeaky.dao.Dao;
-import co.touchlab.squeaky.db.sqlcipher.SQLiteDatabaseImpl;
-import co.touchlab.squeaky.table.TableUtils;
 
 /**
  * Created by spiria on 14/9/17.
