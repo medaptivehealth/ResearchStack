@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'com.github.dcendents.android-maven'
 
 version = '2.2.9'
 
@@ -55,7 +54,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'androidx.annotation:annotation:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -63,12 +62,10 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.9.1'
 
+    implementation 'joda-time:joda-time:2.11.1'
     implementation 'com.cronutils:cron-utils:3.1.2', {
         exclude group: 'joda-time', module: 'joda-time' // this can cause dex errors due to duplicate joda times
     }
-    implementation 'net.danlew:android.joda:2.11.0.1' // android specific joda time, jre version causes perf problems
-    //testImplementation 'joda-time:joda-time:2.11.0.1'
-
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.9.0'
@@ -122,7 +119,7 @@ project.afterEvaluate {
                 artifact(bundleReleaseAar)
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
-                    configurations.compile.allDependencies.each {
+                    configurations.implementation.allDependencies.each {
                         if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
