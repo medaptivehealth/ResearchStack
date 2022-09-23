@@ -12,6 +12,7 @@ import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.backbone.utils.FormatHelper;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -45,7 +46,7 @@ public class StagedEventRecord {
     public String taskId;
 
     @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = true)
-    public Object task;
+    public Serializable task;
 
     @DatabaseField(canBeNull = true)
     public String taskResultId;
