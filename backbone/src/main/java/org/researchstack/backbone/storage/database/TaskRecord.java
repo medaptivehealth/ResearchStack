@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -39,5 +40,12 @@ public class TaskRecord {
             taskResult.setStepResultForStepIdentifier(result.getIdentifier(), result);
         }
         return taskResult;
+    }
+
+
+    public static class SortByCompleted implements Comparator<TaskRecord> {
+        public int compare(TaskRecord a, TaskRecord b) {
+            return a.completed.compareTo(b.completed);
+        }
     }
 }

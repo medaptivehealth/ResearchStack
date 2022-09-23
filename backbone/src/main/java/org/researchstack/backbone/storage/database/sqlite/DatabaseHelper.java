@@ -20,6 +20,7 @@ import org.researchstack.backbone.utils.LogExt;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -74,7 +75,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements AppDataba
             getDao(TaskRecord.class).create(taskRecord);
 
             Gson gson = new GsonBuilder().setDateFormat(FormatHelper.DATE_FORMAT_ISO_8601).create();
-            Dao<StepRecord> stepResultDao = getDao(StepRecord.class);
+            Dao<StepRecord, ?> stepResultDao = getDao(StepRecord.class);
 
             for (StepResult stepResult : taskResult.getResults().values()) {
                 if (stepResult != null) {
@@ -103,15 +104,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements AppDataba
 
         try {
             List<TaskRecord> taskRecords = getDao(TaskRecord.class).queryForEq(TaskRecord.TASK_ID,
-                    taskIdentifier).orderBy(TaskRecord.COMPLETED + " DESC").limit(1).list();
+                    taskIdentifier);//.orderBy(TaskRecord.COMPLETED + " DESC").limit(1).list();
+
+            //Collections.sort(taskRecords);
 
             if (taskRecords.isEmpty()) {
                 return null;
             }
 
             TaskRecord record = taskRecords.get(0);
-            List<StepRecord> stepRecords = getDao(StepRecord.class).queryForEq(StepRecord.TASK_RECORD_ID,
-                    record.id).list();
+            List<StepRecord> stepRecords = getDao(StepRecord.class).queryForEq(StepRecord.TASK_RECORD_ID, record.id);
             return TaskRecord.toTaskResult(record, stepRecords);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -124,12 +126,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements AppDataba
 
         try {
             List<TaskResult> results = new ArrayList<>();
-            List<TaskRecord> taskRecords = getDao(TaskRecord.class).queryForEq(TaskRecord.TASK_ID,
-                    taskIdentifier).list();
+            List<TaskRecord> taskRecords = getDao(TaskRecord.class).queryForEq(TaskRecord.TASK_ID, taskIdentifier);
 
             for (TaskRecord record : taskRecords) {
                 List<StepRecord> stepRecords = getDao(StepRecord.class).queryForEq(StepRecord.TASK_RECORD_ID,
-                        record.id).list();
+                        record.id);
                 TaskResult result = TaskRecord.toTaskResult(record, stepRecords);
                 results.add(result);
             }
@@ -146,8 +147,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements AppDataba
 
         try {
             List<StepResult> results = new ArrayList<>();
-            List<StepRecord> stepRecords = getDao(StepRecord.class).queryForEq(StepRecord.STEP_ID,
-                    stepIdentifier).list();
+            List<StepRecord> stepRecords = getDao(StepRecord.class).queryForEq(StepRecord.STEP_ID, stepIdentifier);
 
             for (StepRecord stepRecord : stepRecords) {
                 StepResult result = StepRecord.toStepResult(stepRecord);

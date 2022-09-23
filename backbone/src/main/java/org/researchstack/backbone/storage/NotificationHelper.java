@@ -1,19 +1,17 @@
 package org.researchstack.backbone.storage;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
-
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-
-import net.sqlcipher.database.SQLiteDatabase;
-
 import org.researchstack.backbone.storage.database.TaskNotification;
 import org.researchstack.backbone.utils.LogExt;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class NotificationHelper extends SQLiteOpenHelper {
+public class NotificationHelper extends OrmLiteSqliteOpenHelper {
     public static final String DB_NAME = "db_notification";
 
     private static int DB_VERSION = 1;
@@ -32,20 +30,18 @@ public class NotificationHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(android.database.sqlite.SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(android.database.sqlite.SQLiteDatabase database, ConnectionSource connectionSource)  {
         try {
-            TableUtils.getCreateTableStatements(new SQLiteDatabase(sqLiteDatabase), TaskNotification.class);
+            TableUtils.createTable(connectionSource, TaskNotification.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void onUpgrade(android.database.sqlite.SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(android.database.sqlite.SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion)  {
         try {
-            TableUtils.dropTables(new SQLiteDatabaseImpl(sqLiteDatabase),
-                    true,
-                    TaskNotification.class);
+            TableUtils.dropTable(connectionSource,TaskNotification.class,true);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +50,8 @@ public class NotificationHelper extends SQLiteOpenHelper {
     public List<TaskNotification> loadTaskNotifications() {
         LogExt.d(getClass(), "loadTaskNotifications()");
         try {
-            return getDao(TaskNotification.class).queryForAll().list();
+            Dao<TaskNotification, String> taskDao = getDao(TaskNotification.class);
+            return taskDao.queryForAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +61,8 @@ public class NotificationHelper extends SQLiteOpenHelper {
         LogExt.d(getClass(), "saveTaskNotification() : " + notification.id);
 
         try {
-            getDao(TaskNotification.class).createOrUpdate(notification);
+            Dao<TaskNotification, Integer> taskDao = getDao(TaskNotification.class);
+            taskDao.createOrUpdate(notification);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +72,8 @@ public class NotificationHelper extends SQLiteOpenHelper {
         LogExt.d(getClass(), "deleteTaskNotification() : " + taskNotificationId);
 
         try {
-            getDao(TaskNotification.class).deleteById(taskNotificationId);
+            Dao<TaskNotification, Integer> taskDao = getDao(TaskNotification.class);
+            taskDao.deleteById(taskNotificationId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
