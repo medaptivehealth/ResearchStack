@@ -103,10 +103,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements AppDataba
         LogExt.d(getClass(), "loadTaskResults() id: " + taskIdentifier);
 
         try {
-            List<TaskRecord> taskRecords = getDao(TaskRecord.class).queryForEq(TaskRecord.TASK_ID,
-                    taskIdentifier);//.orderBy(TaskRecord.COMPLETED + " DESC").limit(1).list();
-
-            //Collections.sort(taskRecords);
+            List<TaskRecord> taskRecords = getDao(TaskRecord.class).queryForEq(TaskRecord.TASK_ID, taskIdentifier);
+            Collections.sort(taskRecords, new TaskRecord.SortByCompleted());
 
             if (taskRecords.isEmpty()) {
                 return null;
