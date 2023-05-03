@@ -51,11 +51,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.so', '**/*.so'])
 
     // These are all support libraries that should be updated when Google releases new ones
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.annotation:annotation:1.5.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -87,7 +87,7 @@ dependencies {
 
     implementation 'com.scottyab:aes-crypto:0.0.5'
     implementation group: 'com.j256.ormlite', name: 'ormlite-android', version: '6.1'
-    implementation 'net.zetetic:android-database-sqlcipher:4.5.2@aar'
+    implementation 'net.zetetic:android-database-sqlcipher:4.5.3@aar'
 
     // Libraries to help with unit testing
     testImplementation 'junit:junit:4.13.2'
