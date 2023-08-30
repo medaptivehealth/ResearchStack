@@ -45,7 +45,17 @@ public class TaskRecord {
 
     public static class SortByCompleted implements Comparator<TaskRecord> {
         public int compare(TaskRecord a, TaskRecord b) {
-            return a.completed.compareTo(b.completed);
+            if (a.completed == null && b.completed == null) {
+                return 0; // Both are null, consider them equal
+            }
+            if (a.completed == null) {
+                return -1; // a is null, so it should come before b
+            }
+            if (b.completed == null) {
+                return 1; // b is null, so a should come before it
+            }
+            return a.completed.compareTo(b.completed); // Both are non-null, compare normally
         }
     }
+
 }
