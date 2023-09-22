@@ -39,8 +39,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public void onCreate(android.database.sqlite.SQLiteDatabase database, ConnectionSource connectionSource) {
         super.onCreate(database, connectionSource);
         try {
-            TableUtils.createTable(connectionSource, StagedActivityRecord.class);
-            TableUtils.createTable(connectionSource, StagedEventRecord.class);
+            TableUtils.createTableIfNotExists(connectionSource, StagedActivityRecord.class);
+            TableUtils.createTableIfNotExists(connectionSource, StagedEventRecord.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
