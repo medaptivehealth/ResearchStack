@@ -2,15 +2,14 @@ package org.researchstack.backbone.storage.database.staged.records;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.researchstack.backbone.model.staged.StagedActivity;
 import org.researchstack.backbone.model.staged.StagedActivityState;
 import org.researchstack.backbone.model.staged.StagedActivityType;
 import org.researchstack.backbone.model.staged.StagedSchedule;
 import org.researchstack.backbone.utils.FormatHelper;
-
-import co.touchlab.squeaky.field.DatabaseField;
-import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by mauriciosouto on 14/9/17.

@@ -1,8 +1,11 @@
 package org.researchstack.backbone.storage.database.staged;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
-import net.sqlcipher.database.SQLiteDatabase;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 
 import org.researchstack.backbone.model.staged.StagedActivity;
 import org.researchstack.backbone.model.staged.StagedActivityState;
@@ -21,9 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.touchlab.squeaky.dao.Dao;
-import co.touchlab.squeaky.db.sqlcipher.SQLiteDatabaseImpl;
-import co.touchlab.squeaky.table.TableUtils;
 
 /**
  * Created by spiria on 14/9/17.
@@ -36,29 +36,23 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        super.onCreate(sqLiteDatabase);
+    public void onCreate(android.database.sqlite.SQLiteDatabase database, ConnectionSource connectionSource) {
+        super.onCreate(database, connectionSource);
         try {
-            TableUtils.createTables(new SQLiteDatabaseImpl(sqLiteDatabase),
-                    StagedActivityRecord.class,
-                    StagedEventRecord.class);
+            TableUtils.createTableIfNotExists(connectionSource, StagedActivityRecord.class);
+            TableUtils.createTableIfNotExists(connectionSource, StagedEventRecord.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        super.onUpgrade(sqLiteDatabase, i, i1);
+    public void onUpgrade(android.database.sqlite.SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        super.onUpgrade(database, connectionSource, oldVersion, newVersion);
         try {
-            TableUtils.dropTables(new SQLiteDatabaseImpl(sqLiteDatabase),
-                    true,
-                    StagedActivityRecord.class,
-                    StagedEventRecord.class);
-
-            TableUtils.createTables(new SQLiteDatabaseImpl(sqLiteDatabase),
-                    StagedActivityRecord.class,
-                    StagedEventRecord.class);
+            TableUtils.dropTable(connectionSource,StagedActivityRecord.class,true);
+            TableUtils.dropTable(connectionSource,StagedEventRecord.class, true);
+            onCreate(database, connectionSource );
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +70,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public void deleteStagedActivity(String activityId) {
         LogExt.d(getClass(), "removeStagedActivity() Activity id: " + activityId);
         try {
-            getDao(StagedActivityRecord.class).deleteById(activityId);
+            Dao<StagedActivityRecord, String> stagedDao = getDao(StagedActivityRecord.class);
+            stagedDao.deleteById(activityId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +80,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public StagedActivity getStagedActivity(String activityId) {
         LogExt.d(getClass(), "getStagedActivity() Activity id: " + activityId);
         try {
-            StagedActivityRecord record = getDao(StagedActivityRecord.class).queryForId(activityId);
+            Dao<StagedActivityRecord, String> stagedDao = getDao(StagedActivityRecord.class);
+            StagedActivityRecord record = stagedDao.queryForId(activityId);
             return StagedActivityRecord.toStagedActivity(record);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -96,7 +92,7 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
         LogExt.d(getClass(), "loadAllStagedActivities()");
         try {
             List<StagedActivity> results = new ArrayList<>();
-            List<StagedActivityRecord> activityRecords = getDao(StagedActivityRecord.class).queryForAll().list();
+            List<StagedActivityRecord> activityRecords = getDao(StagedActivityRecord.class).queryForAll();
 
             for (StagedActivityRecord record : activityRecords) {
                 StagedActivity result = StagedActivityRecord.toStagedActivity(record);
@@ -112,7 +108,7 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
         LogExt.d(getClass(), "deleteStagedActivities()");
         try {
             List<StagedActivity> results = new ArrayList<>();
-            List<StagedActivityRecord> activityRecords = getDao(StagedActivityRecord.class).queryForAll().list();
+            List<StagedActivityRecord> activityRecords = getDao(StagedActivityRecord.class).queryForAll();
 
             for (StagedActivityRecord record : activityRecords) {
                 deleteStagedActivity(record.stagedActivityId);
@@ -149,7 +145,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public void deleteStagedEvent(int eventId) {
         LogExt.d(getClass(), "deleteStagedEvent() Event id: " + eventId);
         try {
-            getDao(StagedEventRecord.class).deleteById(eventId);
+            Dao<StagedEventRecord, Integer> stagedDao = getDao(StagedEventRecord.class);
+            stagedDao.deleteById(eventId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -158,7 +155,7 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public List<StagedEvent> loadAllStagedEvents() {
         LogExt.d(getClass(), "loadAllStagedEvents()");
         try {
-            List<StagedEventRecord> eventRecords = getDao(StagedEventRecord.class).queryForAll().list();
+            List<StagedEventRecord> eventRecords = getDao(StagedEventRecord.class).queryForAll();
             return eventsFromRecords(eventRecords, null);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -168,13 +165,12 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public List<StagedEvent> loadStagedEvents(Date date, String activityId, StagedActivityState status) {
         LogExt.d(getClass(), "loadStagedEvents()");
         try {
-            Dao dao = getDao(StagedEventRecord.class);
-
+            Dao<StagedEventRecord, ?> dao = getDao(StagedEventRecord.class);
             Map<String, Object> where = new HashMap<>();
             where.put(StagedEventRecord.ACTIVITY_ID_COLUMN, activityId);
             where.put(StagedEventRecord.STATUS_COLUMN, status);
 
-            List<StagedEventRecord> eventRecords = dao.queryForFieldValues(where).list();
+            List<StagedEventRecord> eventRecords = dao.queryForFieldValues(where);
             return eventsFromRecords(eventRecords, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -184,12 +180,11 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public List<StagedEvent> loadStagedEvents(Date date, String activityId) {
         LogExt.d(getClass(), "loadStagedEvents()");
         try {
-            Dao dao = getDao(StagedEventRecord.class);
-
+            Dao<StagedEventRecord, ?> dao = getDao(StagedEventRecord.class);
             Map<String, Object> where = new HashMap<>();
             where.put(StagedEventRecord.ACTIVITY_ID_COLUMN, activityId);
 
-            List<StagedEventRecord> eventRecords = dao.queryForFieldValues(where).list();
+            List<StagedEventRecord> eventRecords = dao.queryForFieldValues(where);
             return eventsFromRecords(eventRecords, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -199,9 +194,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public List<StagedEvent> loadLiveStagedEvents(Date date) {
         LogExt.d(getClass(), "loadLiveStagedEvents()");
         try {
-
-            Dao dao = getDao(StagedEventRecord.class);
-            List<StagedEventRecord> eventRecords = dao.queryForAll().list();
+            Dao<StagedEventRecord, ?> dao = getDao(StagedEventRecord.class);
+            List<StagedEventRecord> eventRecords = dao.queryForAll();
             return eventsFromRecords(eventRecords, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -211,9 +205,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public void deleteFutureStagedEvents(Date date) {
         LogExt.d(getClass(), "deleteFutureStagedEvents()");
         try {
-            Dao dao = getDao(StagedEventRecord.class);
-
-            List<StagedEventRecord> eventRecords = dao.queryForAll().list();
+            Dao<StagedEventRecord, ?> dao = getDao(StagedEventRecord.class);
+            List<StagedEventRecord> eventRecords = dao.queryForAll();
             for (StagedEventRecord record : eventRecords) {
                 if (date == null || !record.eventStartDate.before(date)) {
                     // Future Event
@@ -231,9 +224,8 @@ public class StagedDatabaseHelper extends SqlCipherDatabaseHelper {
     public void deleteStagedEvents() {
         LogExt.d(getClass(), "deleteStagedEvents()");
         try {
-            Dao dao = getDao(StagedEventRecord.class);
-
-            List<StagedEventRecord> eventRecords = dao.queryForAll().list();
+            Dao<StagedEventRecord, ?> dao = getDao(StagedEventRecord.class);
+            List<StagedEventRecord> eventRecords = dao.queryForAll();
             for (StagedEventRecord record : eventRecords) {
                 deleteStagedEvent(record.id);
             }

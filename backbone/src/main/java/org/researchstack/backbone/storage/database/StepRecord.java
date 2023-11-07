@@ -2,6 +2,8 @@ package org.researchstack.backbone.storage.database;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.researchstack.backbone.answerformat.AnswerFormat;
 import org.researchstack.backbone.result.StepResult;
@@ -12,9 +14,6 @@ import org.researchstack.backbone.utils.TextUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import co.touchlab.squeaky.field.DatabaseField;
-import co.touchlab.squeaky.table.DatabaseTable;
 
 @DatabaseTable
 public class StepRecord {
