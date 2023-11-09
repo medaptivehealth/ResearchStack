@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
 version = '2.3.2'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     dexOptions {
         preDexLibraries = false
@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 120
         versionName version
         vectorDrawables.useSupportLibrary = true
@@ -54,8 +54,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.annotation:annotation:1.6.0'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
