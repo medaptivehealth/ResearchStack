@@ -51,6 +51,10 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
     }
     protected TaskResult taskResult;
 
+    public TaskResult getTaskResult() {
+        return taskResult;
+    }
+
     private boolean readOnlyMode = false;
     protected int currentStepAction;
 
@@ -59,6 +63,25 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
         Intent intent = new Intent(context, ViewTaskActivity.class);
         intent.putExtra(EXTRA_TASK, task);
         return intent;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_TASK, task);
+        outState.putSerializable(EXTRA_TASK_RESULT, taskResult);
+        outState.putSerializable(EXTRA_STEP, currentStep);
+        outState.putBoolean(EXTRA_READONLY, readOnlyMode);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.taskResult = (TaskResult)savedInstanceState.getSerializable(EXTRA_TASK_RESULT);
+        this.task = (Task)savedInstanceState.getSerializable(EXTRA_TASK);
+        this.currentStep = (Step)savedInstanceState.getSerializable(EXTRA_STEP);
+        this.readOnlyMode = savedInstanceState.getBoolean(EXTRA_READONLY,false);
     }
 
     @Override
@@ -305,15 +328,6 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
         notifyStepOfBackPress();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(EXTRA_TASK, task);
-        outState.putSerializable(EXTRA_TASK_RESULT, taskResult);
-        outState.putSerializable(EXTRA_STEP, currentStep);
-        outState.putBoolean(EXTRA_READONLY, readOnlyMode);
-    }
 
     protected void notifyStepOfBackPress()
     {

@@ -2,6 +2,9 @@ package org.researchstack.backbone.storage.database.staged.records;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.researchstack.backbone.model.staged.StagedActivityState;
 import org.researchstack.backbone.model.staged.StagedEvent;
@@ -9,11 +12,8 @@ import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.backbone.utils.FormatHelper;
 
+import java.io.Serializable;
 import java.util.Date;
-
-import co.touchlab.squeaky.field.DataType;
-import co.touchlab.squeaky.field.DatabaseField;
-import co.touchlab.squeaky.table.DatabaseTable;
 
 /**
  * Created by mauriciosouto on 14/9/17.
@@ -46,7 +46,7 @@ public class StagedEventRecord {
     public String taskId;
 
     @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = true)
-    public Object task;
+    public Serializable task;
 
     @DatabaseField(canBeNull = true)
     public String taskResultId;
