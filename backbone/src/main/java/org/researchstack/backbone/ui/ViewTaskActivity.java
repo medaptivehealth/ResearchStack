@@ -31,6 +31,7 @@ import java.util.Date;
 
 public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
 {
+    public static final String EXTRA_STRING          = "ViewTaskActivity.ExtraString";
     public static final String EXTRA_TASK           = "ViewTaskActivity.ExtraTask";
     public static final String EXTRA_TASK_RESULT    = "ViewTaskActivity.ExtraTaskResult";
     public static final String EXTRA_STEP           = "ViewTaskActivity.ExtraStep";
@@ -57,6 +58,8 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
 
     private boolean readOnlyMode = false;
     protected int currentStepAction;
+
+    private String mExtraString = null;
 
     public static Intent newIntent(Context context, Task task)
     {
@@ -113,6 +116,12 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
             if (getIntent().hasExtra(EXTRA_STEP)) {
                 currentStep = (Step)getIntent().getSerializableExtra(EXTRA_STEP);
             }
+
+            if (getIntent().hasExtra(EXTRA_STRING)) {
+                mExtraString = getIntent().getStringExtra(EXTRA_STRING);
+            }
+
+
 
             taskResult.setStartDate(new Date());
         }
@@ -256,6 +265,7 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EXTRA_TASK_RESULT, taskResult);
         resultIntent.putExtra(EXTRA_TASK, task);
+        resultIntent.putExtra(EXTRA_STRING, mExtraString);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
