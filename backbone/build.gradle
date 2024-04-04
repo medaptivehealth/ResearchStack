@@ -54,8 +54,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.annotation:annotation:1.7.0'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -91,14 +91,14 @@ dependencies {
 
     // Libraries to help with unit testing
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-core:5.1.1'
     androidTestImplementation 'org.mockito:mockito-android:4.8.0'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
     testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.9'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
     testImplementation 'org.powermock:powermock-classloading-xstream:2.0.9'
 
-    testImplementation 'org.robolectric:robolectric:4.8.2'
+    testImplementation 'org.robolectric:robolectric:4.10.3'
 }
 
 
