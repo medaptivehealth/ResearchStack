@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
-version = '2.3.3'
+version = '2.3.4'
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     dexOptions {
         preDexLibraries = false
