@@ -76,7 +76,7 @@ public class ConsentVisualStepLayout extends FixedSubmitBarLayout implements Ste
         // Set Image
         TypedValue typedValue = new TypedValue();
         TypedArray a = getContext().obtainStyledAttributes(typedValue.data,
-                new int[]{R.attr.colorAccent});
+                new int[]{androidx.appcompat.R.attr.colorAccent});
         int accentColor = a.getColor(0, 0);
         a.recycle();
 

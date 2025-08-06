@@ -122,17 +122,17 @@ public class BaseActivity extends PinCodeActivity
      */
     private TextView getSnackBarMessageView(Snackbar snackbar)
     {
-        // Try id for app level snackbar id
-        int id = org.researchstack.backbone.R.id.snackbar_text;
-        TextView tv = (TextView) snackbar.getView().findViewById(id);
-        if (tv != null)
-        {
-            return tv;
-        }
+//        // Try id for app level snackbar id
+//        int id = org.researchstack.backbone.R.id.snackbar_text;
+//        TextView tv = (TextView) snackbar.getView().findViewById(id);
+//        if (tv != null)
+//        {
+//            return tv;
+//        }
 
         // Try id for lib level snackbar id
-        id = com.google.android.material.R.id.snackbar_text;
-        tv = (TextView) snackbar.getView().findViewById(id);
+        int id = com.google.android.material.R.id.snackbar_text;
+        TextView tv = (TextView) snackbar.getView().findViewById(id);
         if (tv != null)
         {
             return tv;
