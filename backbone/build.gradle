@@ -86,7 +86,7 @@ dependencies {
 
     implementation 'com.scottyab:aes-crypto:0.0.5'
     implementation group: 'com.j256.ormlite', name: 'ormlite-android', version: '6.1'
-    implementation 'net.zetetic:android-database-sqlcipher:4.5.4@aar'
+    //implementation 'net.zetetic:android-database-sqlcipher:4.5.4@aar'
 
     // Libraries to help with unit testing
     testImplementation 'junit:junit:4.13.2'
